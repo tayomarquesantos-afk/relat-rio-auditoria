@@ -124,6 +124,87 @@
             border-radius: 4px;
             margin-bottom: 0.5rem;
         }
+
+        .assinatura-linha {
+            border-bottom: 1px solid #000;
+            margin-top: 40px;
+            padding-bottom: 5px;
+        }
+
+        .assinatura-nome {
+            font-size: 12px;
+            margin-top: 5px;
+            text-align: center;
+        }
+
+        .assinatura-container {
+            margin-bottom: 20px;
+        }
+
+        .assinaturas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .btn-adicionar-assinatura {
+            margin-bottom: 20px;
+        }
+
+        /* Estilos para evidências */
+        .evidencia-container {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .evidencia-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .evidencia-titulo {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        .evidencia-descricao {
+            margin-top: 1rem;
+        }
+
+        .evidencias-botoes {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-evidencia {
+            white-space: nowrap;
+        }
+
+        .imagem-preview {
+            max-width: 200px;
+            max-height: 150px;
+            border-radius: 4px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -235,15 +316,28 @@
                     <label for="situacaoEncontrada" class="form-label required">Descrição do desvio</label>
                     <textarea class="form-control" id="situacaoEncontrada" rows="5" required>Para realizar a energização e utilização da BALANÇA RODOVIÁRIA, se faz necessário a conexão com um ponto de energia mais próximo. O cabo necessário para ligação de forma provisória da balança é de 4x6mm², foi verificado a utilização do cabo de 149m que veio de transferência de outra unidade, porém o cabo já está compatibilizado em outro projeto. É necessário a transferência de 65m cabo cobre PVC 4x6mm² de outra unidade ou emitir uma ordem de compra para essa utilização.</textarea>
                 </div>
+                
+                <!-- Nova Seção de Evidências -->
                 <div class="mb-3">
-                    <label class="form-label">Evidências (imagens, documentos)</label>
-                    <div class="file-upload" id="fileUploadArea">
-                        <i class="fas fa-cloud-upload-alt fa-2x mb-2"></i>
-                        <p>Arraste arquivos aqui ou clique para selecionar</p>
-                        <input type="file" id="fileInput" multiple style="display: none;">
+                    <label class="form-label">Evidências</label>
+                    
+                    <div class="evidencias-botoes">
+                        <button type="button" class="btn btn-outline-primary btn-evidencia" onclick="adicionarEvidencia('Fotos')">
+                            <i class="fas fa-camera me-1"></i> Adicionar Fotos
+                        </button>
+                        <button type="button" class="btn btn-outline-primary btn-evidencia" onclick="adicionarEvidencia('Documentos')">
+                            <i class="fas fa-file me-1"></i> Adicionar Documentos
+                        </button>
+                        <button type="button" class="btn btn-outline-primary btn-evidencia" onclick="adicionarEvidencia('Laudos')">
+                            <i class="fas fa-clipboard-check me-1"></i> Adicionar Laudos
+                        </button>
+                        <button type="button" class="btn btn-outline-primary btn-evidencia" onclick="adicionarEvidencia('Outras Evidências')">
+                            <i class="fas fa-plus me-1"></i> Outras Evidências
+                        </button>
                     </div>
-                    <div class="file-list" id="fileList">
-                        <!-- Lista de arquivos será adicionada aqui -->
+
+                    <div id="containerEvidencias">
+                        <!-- Evidências serão adicionadas aqui dinamicamente -->
                     </div>
                 </div>
             </div>
@@ -314,25 +408,18 @@
             <!-- Seção 5: Assinaturas -->
             <div class="form-section">
                 <h3><i class="fas fa-pen me-2"></i>Assinaturas</h3>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="assinatura1" class="form-label">Responsável 1</label>
-                        <input type="text" class="form-control" id="assinatura1" value="Isaac F. Dos Santos - Esp. montagem projetos elétricos">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="assinatura2" class="form-label">Responsável 2</label>
-                        <input type="text" class="form-control" id="assinatura2" value="Leonardo Antonio Godol - SUP. REG. OBRAS ELÉT. INST.">
+                
+                <div class="mb-3">
+                    <div class="input-group btn-adicionar-assinatura">
+                        <input type="text" class="form-control" id="novaAssinatura" placeholder="Digite um novo cargo...">
+                        <button type="button" class="btn btn-primary" onclick="adicionarAssinaturaPersonalizada()">
+                            <i class="fas fa-plus me-1"></i> Adicionar Assinatura
+                        </button>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="assinatura3" class="form-label">Responsável 3</label>
-                        <input type="text" class="form-control" id="assinatura3" value="Taxomarque dos Santos Cruz - Esp. Aud. Elétrica e Instr.">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="assinatura4" class="form-label">Responsável 4</label>
-                        <input type="text" class="form-control" id="assinatura4" value="Gustavo V. Simoes - SUPERVISOR PROJETOS ELETRICOS">
-                    </div>
+
+                <div class="assinaturas-grid" id="containerAssinaturas">
+                    <!-- Assinaturas serão adicionadas aqui dinamicamente -->
                 </div>
             </div>
 
@@ -359,15 +446,13 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Arrays para armazenar dados
+        let assinaturas = [];
+        let evidencias = [];
+        let contadorEvidencias = 0;
+
         // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
-            // Configurar upload de arquivos
-            const fileUploadArea = document.getElementById('fileUploadArea');
-            const fileInput = document.getElementById('fileInput');
-            
-            fileUploadArea.addEventListener('click', () => fileInput.click());
-            fileInput.addEventListener('change', handleFileUpload);
-            
             // Configurar botões
             document.getElementById('btnSalvarRascunho').addEventListener('click', salvarRascunho);
             document.getElementById('btnExportarPDF').addEventListener('click', exportarParaPDF);
@@ -375,6 +460,9 @@
             
             // Carregar data atual
             document.getElementById('dataNotificacao').valueAsDate = new Date();
+
+            // Adicionar algumas assinaturas padrão
+            adicionarAssinatura('SUPERVISOR REGIONAL DE PROJETOS ELÉTRICOS');
         });
 
         // Funções para manipulação de tabelas
@@ -406,33 +494,178 @@
             linha.remove();
         }
 
-        // Funções para upload de arquivos
-        function handleFileUpload(event) {
-            const files = event.target.files;
-            const fileList = document.getElementById('fileList');
+        // Funções para gerenciar assinaturas
+        function adicionarAssinatura(cargo) {
+            const id = 'assinatura_' + Date.now();
+            const assinatura = {
+                id: id,
+                cargo: cargo,
+                nome: ''
+            };
             
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                const fileItem = document.createElement('div');
-                fileItem.className = 'file-item';
-                fileItem.innerHTML = `
-                    <div>
-                        <i class="fas fa-file me-2"></i> ${file.name}
+            assinaturas.push(assinatura);
+            renderizarAssinaturas();
+        }
+
+        function adicionarAssinaturaPersonalizada() {
+            const input = document.getElementById('novaAssinatura');
+            const cargo = input.value.trim();
+            
+            if (cargo) {
+                adicionarAssinatura(cargo);
+                input.value = '';
+            } else {
+                alert('Por favor, digite um cargo para adicionar.');
+            }
+        }
+
+        function removerAssinatura(id) {
+            assinaturas = assinaturas.filter(assinatura => assinatura.id !== id);
+            renderizarAssinaturas();
+        }
+
+        function atualizarNomeAssinatura(id, nome) {
+            const assinatura = assinaturas.find(a => a.id === id);
+            if (assinatura) {
+                assinatura.nome = nome;
+            }
+        }
+
+        function renderizarAssinaturas() {
+            const container = document.getElementById('containerAssinaturas');
+            container.innerHTML = '';
+
+            assinaturas.forEach(assinatura => {
+                const div = document.createElement('div');
+                div.className = 'assinatura-container';
+                div.innerHTML = `
+                    <div class="assinatura-linha"></div>
+                    <div class="assinatura-nome">
+                        <input type="text" 
+                               class="form-control form-control-sm text-center" 
+                               placeholder="Nome do responsável"
+                               value="${assinatura.nome}"
+                               onchange="atualizarNomeAssinatura('${assinatura.id}', this.value)">
+                        <small class="text-muted">${assinatura.cargo}</small>
                     </div>
-                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="removerArquivo(this)">
-                        <i class="fas fa-times"></i>
-                    </button>
+                    <div class="text-center mt-2">
+                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="removerAssinatura('${assinatura.id}')">
+                            <i class="fas fa-times me-1"></i> Remover
+                        </button>
+                    </div>
                 `;
-                fileList.appendChild(fileItem);
+                container.appendChild(div);
+            });
+        }
+
+        // Funções para gerenciar evidências
+        function adicionarEvidencia(tipo) {
+            contadorEvidencias++;
+            const id = 'evidencia_' + Date.now();
+            const evidencia = {
+                id: id,
+                tipo: tipo,
+                descricao: '',
+                arquivos: [],
+                numero: contadorEvidencias
+            };
+            
+            evidencias.push(evidencia);
+            renderizarEvidencias();
+        }
+
+        function removerEvidencia(id) {
+            evidencias = evidencias.filter(evidencia => evidencia.id !== id);
+            // Reorganizar números
+            evidencias.forEach((evidencia, index) => {
+                evidencia.numero = index + 1;
+            });
+            contadorEvidencias = evidencias.length;
+            renderizarEvidencias();
+        }
+
+        function atualizarDescricaoEvidencia(id, descricao) {
+            const evidencia = evidencias.find(e => e.id === id);
+            if (evidencia) {
+                evidencia.descricao = descricao;
+            }
+        }
+
+        function handleFileUploadEvidencia(event, id) {
+            const files = event.target.files;
+            const evidencia = evidencias.find(e => e.id === id);
+            
+            if (evidencia) {
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    evidencia.arquivos.push({
+                        nome: file.name,
+                        arquivo: file
+                    });
+                }
+                renderizarEvidencias();
             }
             
-            // Resetar o input para permitir selecionar o mesmo arquivo novamente
+            // Resetar o input
             event.target.value = '';
         }
 
-        function removerArquivo(botao) {
-            const fileItem = botao.closest('.file-item');
-            fileItem.remove();
+        function removerArquivoEvidencia(id, indexArquivo) {
+            const evidencia = evidencias.find(e => e.id === id);
+            if (evidencia) {
+                evidencia.arquivos.splice(indexArquivo, 1);
+                renderizarEvidencias();
+            }
+        }
+
+        function renderizarEvidencias() {
+            const container = document.getElementById('containerEvidencias');
+            container.innerHTML = '';
+
+            evidencias.forEach(evidencia => {
+                const div = document.createElement('div');
+                div.className = 'evidencia-container';
+                div.innerHTML = `
+                    <div class="evidencia-header">
+                        <h6 class="evidencia-titulo">${evidencia.tipo} - Figura ${evidencia.numero}</h6>
+                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="removerEvidencia('${evidencia.id}')">
+                            <i class="fas fa-times me-1"></i> Remover
+                        </button>
+                    </div>
+                    
+                    <div class="file-upload" onclick="document.getElementById('fileInput_${evidencia.id}').click()">
+                        <i class="fas fa-cloud-upload-alt fa-2x mb-2"></i>
+                        <p>Arraste arquivos aqui ou clique para selecionar</p>
+                        <input type="file" id="fileInput_${evidencia.id}" multiple 
+                               style="display: none;" 
+                               onchange="handleFileUploadEvidencia(event, '${evidencia.id}')">
+                    </div>
+                    
+                    ${evidencia.arquivos.length > 0 ? `
+                        <div class="file-list">
+                            <strong>Arquivos adicionados:</strong>
+                            ${evidencia.arquivos.map((arquivo, index) => `
+                                <div class="file-item">
+                                    <div>
+                                        <i class="fas fa-file me-2"></i> ${arquivo.nome}
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="removerArquivoEvidencia('${evidencia.id}', ${index})">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                    
+                    <div class="evidencia-descricao">
+                        <label class="form-label">Descrição da Figura ${evidencia.numero}:</label>
+                        <textarea class="form-control" rows="3" 
+                                  placeholder="Descreva esta evidência..."
+                                  onchange="atualizarDescricaoEvidencia('${evidencia.id}', this.value)">${evidencia.descricao}</textarea>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
         }
 
         // Funções para salvar/carregar rascunhos
@@ -446,6 +679,8 @@
                 responsavelEmpresa: document.getElementById('responsavelEmpresa').value,
                 responsavelArea: document.getElementById('responsavelArea').value,
                 situacaoEncontrada: document.getElementById('situacaoEncontrada').value,
+                assinaturas: assinaturas,
+                evidencias: evidencias,
                 dataSalvamento: new Date().toLocaleString('pt-BR')
             };
             
@@ -474,19 +709,137 @@
                 <head>
                     <title>Relatório de Não Conformidade</title>
                     <style>
-                        body { font-family: Arial, sans-serif; margin: 20px; }
-                        .header { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; }
-                        .section { margin: 20px 0; padding: 15px; border-left: 4px solid #3498db; background: #f8f9fa; }
-                        table { width: 100%; border-collapse: collapse; margin: 10px 0; }
-                        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-                        th { background: #2c3e50; color: white; }
+                        body { 
+                            font-family: Arial, sans-serif; 
+                            margin: 20px; 
+                            line-height: 1.4;
+                            font-size: 12px;
+                        }
+                        .header { 
+                            background: #2c3e50; 
+                            color: white; 
+                            padding: 20px; 
+                            border-radius: 8px;
+                            margin-bottom: 20px;
+                        }
+                        .section { 
+                            margin: 25px 0; 
+                            padding: 15px; 
+                            border-left: 4px solid #3498db; 
+                            background: #f8f9fa;
+                            border-radius: 5px;
+                        }
+                        .keep-together {
+                            page-break-inside: avoid;
+                            break-inside: avoid;
+                        }
+                        table { 
+                            width: 100%; 
+                            border-collapse: collapse; 
+                            margin: 10px 0; 
+                            font-size: 11px;
+                        }
+                        th, td { 
+                            border: 1px solid #ddd; 
+                            padding: 8px; 
+                            text-align: left; 
+                        }
+                        th { 
+                            background: #2c3e50; 
+                            color: white; 
+                            font-weight: bold;
+                        }
+                        h1 { 
+                            font-size: 20px; 
+                            margin: 0 0 10px 0;
+                        }
+                        h2 { 
+                            font-size: 16px; 
+                            margin: 15px 0 8px 0;
+                            color: #2c3e50;
+                        }
+                        h3 { 
+                            font-size: 14px; 
+                            margin: 12px 0 6px 0;
+                            color: #2c3e50;
+                        }
+                        p { 
+                            margin: 6px 0; 
+                        }
+                        .item-group {
+                            page-break-inside: avoid;
+                            break-inside: avoid;
+                            margin: 15px 0;
+                        }
+                        .assinatura-pdf {
+                            margin: 20px 0;
+                            text-align: center;
+                            width: 45%;
+                            display: inline-block;
+                            vertical-align: top;
+                        }
+                        .linha-assinatura {
+                            border-bottom: 1px solid #000;
+                            margin: 40px 0 5px 0;
+                        }
+                        .nome-assinatura {
+                            font-size: 11px;
+                            margin: 0;
+                        }
+                        .cargo-assinatura {
+                            font-size: 10px;
+                            color: #666;
+                            margin: 0;
+                        }
+                        .assinaturas-container {
+                            display: flex;
+                            flex-wrap: wrap;
+                            justify-content: space-between;
+                            margin-top: 20px;
+                        }
+                        .evidencia-pdf {
+                            margin: 15px 0;
+                            padding: 10px;
+                            border: 1px solid #ddd;
+                            border-radius: 5px;
+                            background: #f9f9f9;
+                        }
+                        .evidencia-titulo-pdf {
+                            font-weight: bold;
+                            color: #2c3e50;
+                            margin-bottom: 5px;
+                        }
+                        .evidencia-descricao-pdf {
+                            margin-top: 8px;
+                            font-style: italic;
+                        }
+                        .arquivos-lista {
+                            margin-top: 5px;
+                            font-size: 11px;
+                        }
+                        @media print {
+                            .keep-together {
+                                page-break-inside: avoid !important;
+                                break-inside: avoid !important;
+                            }
+                            .item-group {
+                                page-break-inside: avoid !important;
+                                break-inside: avoid !important;
+                            }
+                            .section {
+                                page-break-inside: avoid;
+                                break-inside: avoid;
+                            }
+                        }
                     </style>
                 </head>
                 <body>
                     ${conteudo}
                     <script>
                         window.print();
-                        setTimeout(() => window.close(), 1000);
+                        setTimeout(() => {
+                            window.close();
+                        }, 500);
                     <\/script>
                 </body>
                 </html>
@@ -498,38 +851,65 @@
             return `
                 <div class="header">
                     <h1>RELATÓRIO DE NÃO CONFORMIDADE</h1>
-                    <p>Código: FO.ENG.CORP.003 | Aprovado em: 07/01/2025 | Revisão: 0</p>
+                    <p><strong>Código:</strong> FO.ENG.CORP.003 | <strong>Aprovado em:</strong> 07/01/2025 | <strong>Revisão:</strong> 0</p>
                 </div>
                 
-                <div class="section">
-                    <h3>Informações Básicas</h3>
-                    <p><strong>Data de notificação:</strong> ${document.getElementById('dataNotificacao').value}</p>
-                    <p><strong>Unidade:</strong> ${document.getElementById('unidade').value}</p>
-                    <p><strong>Área/setor:</strong> ${document.getElementById('areaSetor').value}</p>
-                    <p><strong>Empresa:</strong> ${document.getElementById('empresa').value}</p>
+                <div class="section keep-together">
+                    <h2>INFORMAÇÕES BÁSICAS</h2>
+                    <table>
+                        <tr>
+                            <td width="25%"><strong>Data de notificação:</strong></td>
+                            <td width="25%">${document.getElementById('dataNotificacao').value}</td>
+                            <td width="25%"><strong>Unidade:</strong></td>
+                            <td width="25%">${document.getElementById('unidade').value}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Área/setor:</strong></td>
+                            <td>${document.getElementById('areaSetor').value}</td>
+                            <td><strong>Empresa:</strong></td>
+                            <td>${document.getElementById('empresa').value}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Projeto:</strong></td>
+                            <td>${document.getElementById('projeto').value || 'Não informado'}</td>
+                            <td><strong>Responsável Área:</strong></td>
+                            <td>${document.getElementById('responsavelArea').value}</td>
+                        </tr>
+                    </table>
                 </div>
                 
-                <div class="section">
-                    <h3>Situação Encontrada</h3>
-                    <p>${document.getElementById('situacaoEncontrada').value}</p>
+                <div class="section keep-together">
+                    <h2>SITUAÇÃO ENCONTRADA</h2>
+                    <p style="text-align: justify;">${document.getElementById('situacaoEncontrada').value}</p>
                 </div>
                 
+                ${evidencias.length > 0 ? `
                 <div class="section">
-                    <h3>Ação Imediata</h3>
+                    <h2>EVIDÊNCIAS</h2>
+                    ${gerarEvidenciasPDF()}
+                </div>
+                ` : ''}
+                
+                <div class="section">
+                    <h2>AÇÃO IMEDIATA</h2>
+                    <p><em>O que foi feito para resolver o problema?</em></p>
                     ${gerarTabelaPDF('tabelaAcaoImediata')}
                 </div>
                 
                 <div class="section">
-                    <h3>Plano de Ação para Mitigação</h3>
+                    <h2>PLANO DE AÇÃO PARA MITIGAÇÃO</h2>
                     ${gerarTabelaPDF('tabelaPlanoAcao')}
                 </div>
                 
-                <div class="section">
-                    <h3>Assinaturas</h3>
-                    <p>${document.getElementById('assinatura1').value}</p>
-                    <p>${document.getElementById('assinatura2').value}</p>
-                    <p>${document.getElementById('assinatura3').value}</p>
-                    <p>${document.getElementById('assinatura4').value}</p>
+                <div class="section keep-together">
+                    <h2>ASSINATURAS</h2>
+                    <div class="assinaturas-container">
+                        ${gerarAssinaturasPDF()}
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; padding-top: 15px; border-top: 1px solid #ccc; font-size: 10px; text-align: center;">
+                    <p>Relatório gerado em: ${new Date().toLocaleString('pt-BR')}</p>
                 </div>
             `;
         }
@@ -537,27 +917,68 @@
         function gerarTabelaPDF(tabelaId) {
             const tabela = document.getElementById(tabelaId);
             const linhas = tabela.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
-            let html = '<table>';
+            let html = '';
             
-            // Cabeçalho
-            html += '<tr>';
-            const headers = tabela.getElementsByTagName('th');
-            for (let i = 0; i < headers.length - 1; i++) {
-                html += `<th>${headers[i].textContent}</th>`;
-            }
-            html += '</tr>';
-            
-            // Linhas
             for (let i = 0; i < linhas.length; i++) {
+                html += `<div class="item-group">`;
+                html += `<table>`;
+                
+                if (i === 0) {
+                    html += '<tr>';
+                    const headers = tabela.getElementsByTagName('th');
+                    for (let j = 0; j < headers.length - 1; j++) {
+                        html += `<th>${headers[j].textContent}</th>`;
+                    }
+                    html += '</tr>';
+                }
+                
                 html += '<tr>';
                 const inputs = linhas[i].getElementsByTagName('input');
                 for (let j = 0; j < inputs.length; j++) {
                     html += `<td>${inputs[j].value}</td>`;
                 }
                 html += '</tr>';
+                
+                html += `</table>`;
+                html += `</div>`;
             }
             
-            html += '</table>';
+            return html;
+        }
+
+        function gerarAssinaturasPDF() {
+            let html = '';
+            assinaturas.forEach(assinatura => {
+                html += `
+                    <div class="assinatura-pdf">
+                        <div class="linha-assinatura"></div>
+                        <p class="nome-assinatura">${assinatura.nome || '_________________________'}</p>
+                        <p class="cargo-assinatura">${assinatura.cargo}</p>
+                    </div>
+                `;
+            });
+            return html;
+        }
+
+        function gerarEvidenciasPDF() {
+            let html = '';
+            evidencias.forEach(evidencia => {
+                html += `
+                    <div class="evidencia-pdf">
+                        <div class="evidencia-titulo-pdf">Figura ${evidencia.numero} - ${evidencia.tipo}</div>
+                        ${evidencia.arquivos.length > 0 ? `
+                            <div class="arquivos-lista">
+                                <strong>Arquivos:</strong> ${evidencia.arquivos.map(arquivo => arquivo.nome).join(', ')}
+                            </div>
+                        ` : ''}
+                        ${evidencia.descricao ? `
+                            <div class="evidencia-descricao-pdf">
+                                <strong>Descrição:</strong> ${evidencia.descricao}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
             return html;
         }
 
